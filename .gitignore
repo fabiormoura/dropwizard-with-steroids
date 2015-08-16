@@ -1,2 +1,11 @@
+# intellij
 .idea
 dropwizard-with-steroids.iml
+*.iml
+
+# osx
+.DS_Store
+
+# gradle
+.gradle
+build/
