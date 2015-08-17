@@ -2,7 +2,6 @@ apply plugin: 'gradle-one-jar'
 
 dependencies {
     compile project(':validation')
-//    compile group: 'com.github.rholder', name: 'gradle-one-jar', version: '1.0.4'
 }
 
 buildscript {
@@ -15,21 +14,13 @@ buildscript {
     }
 }
 
-task oneJar(type: OneJar) {
+task buildFatJar(type: OneJar) {
+    description = 'Assembles a fat jar archive containing the main classes and all dependencies'
     mainClass = 'com.dropwizard.steroids.quickstart.QuickStartApplication'
 }
 
-//jar {
-//    from {
-//        configurations.runtime.collect {
-//            it.isDirectory() ? it : zipTree(it)
-//        }
-//    } {
-//        exclude "META-INF/*.SF"
-//        exclude "META-INF/*.DSA"
-//        exclude "META-INF/*.RSA"
-//    }
-//    manifest {
-//        attributes("Main-Class": "com.dropwizard.steroids.quickstart.QuickStartApplication")
-//    }
-//}
+task deleteNonFatJar(dependsOn: buildFatJar, type: Delete) {
+    delete jar.archivePath
+}
+
+assemble.dependsOn([buildFatJar, deleteNonFatJar])
